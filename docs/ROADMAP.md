@@ -10,6 +10,8 @@ AmiWall separates policy from enforcement:
 
 This separation lets rule parsing and policy semantics be tested before AmiWall gains any capability to affect real network traffic.
 
+ARexx support is a project requirement. AmiWall must remain operable without RexxMast, but when RexxMast is available it should expose a documented `AMIWALL` public port. Common commands should include `VERSION`, `STATUS` and `HELP`; firewall-specific commands should support safe inspection and control such as policy reload and counters. Commands that change security policy must have explicit, predictable semantics and must not weaken the firewall merely because ARexx is unavailable.
+
 ## M0 — Foundation
 
 Acceptance criteria:
@@ -20,6 +22,7 @@ Acceptance criteria:
 - Draft rule syntax documented.
 - Example baseline policy present.
 - Stack adapter architecture documented.
+- ARexx is recorded as a required management interface, while firewall operation remains independent of RexxMast.
 - Host-side `tools/check_m0.py` validates the baseline.
 - Documentation explicitly states that M0 performs no real filtering.
 
@@ -70,12 +73,14 @@ Add policy validation, atomic/safe reload where practical, dry-run and recovery 
 
 ## M7 — ARexx and integration
 
-Add an ARexx interface where practical for status, reload and diagnostics. Provide optional integration hooks for other Ploos-AS Amiga security tooling.
+Implement and qualify the required `AMIWALL` ARexx port. At minimum expose `VERSION`, `STATUS` and `HELP`, plus appropriate firewall operations such as `RELOAD`, `ENABLE`, `DISABLE`, `COUNTERS`/`STATS` and policy/rule inspection. Security-sensitive state changes must return explicit status and error codes. Document arguments, results and return codes.
+
+RexxMast is optional: filtering and the CLI/runtime must continue to operate safely without it. Provide optional integration hooks for other Ploos-AS Amiga security tooling.
 
 ## M8 — Hardening
 
-Exercise malformed rules, resource exhaustion, large rule sets, logging failures, stack loss/restart and recovery behaviour.
+Exercise malformed rules, resource exhaustion, large rule sets, logging failures, stack loss/restart, ARexx misuse/failure and recovery behaviour.
 
 ## M9 — Release qualification
 
-Qualify supported OS/CPU/stack combinations, produce release archives and document known limitations clearly.
+Qualify supported OS/CPU/stack combinations, including ARexx operation with RexxMast and normal operation without RexxMast. Produce release archives and document known limitations clearly.
