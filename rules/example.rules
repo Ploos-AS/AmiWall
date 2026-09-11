@@ -1,0 +1,10 @@
+# AmiWall M0 example policy
+# Syntax is provisional; M0 does not enforce traffic.
+
+ALLOW OUT TCP ANY 80
+ALLOW OUT TCP ANY 443
+ALLOW OUT UDP ANY 53
+DENY  OUT ANY ANY ANY
+
+ALLOW IN TCP 192.168.1.0/24 23
+DENY  IN ANY ANY ANY
